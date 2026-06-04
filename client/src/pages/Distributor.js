@@ -7,116 +7,258 @@ import {
   useSelector
 } from "react-redux";
 
+import { useNavigate } from "react-router-dom";
+
 import { fetchPrices }
 from "../redux/priceSlice";
 
+import DistributorLayout
+from "../components/DistributorLayout";
+
 function Distributor() {
 
-  const dispatch = useDispatch();
+  const dispatch =
+    useDispatch();
 
-  const { prices, loading } =
-    useSelector((state) => state.prices);
-    console.log(prices);
+  const navigate =
+    useNavigate();
 
-  const token = localStorage.getItem("token");
+  const {
+    prices,
+    loading
+  } = useSelector(
+    (state) => state.prices
+  );
+
+  const token =
+    localStorage.getItem("token");
+
+    const name =
+  localStorage.getItem("name");
 
   useEffect(() => {
 
-    dispatch(fetchPrices());
+    dispatch(
+      fetchPrices()
+    );
 
   }, [dispatch]);
 
 
   // UPDATE PRICE
 
-  const handleUpdate = async (id) => {
+  const handleUpdate =
+    async (id) => {
 
-    const newPrice =
-      prompt("Enter new price");
+      const newPrice =
+        prompt(
+          "Enter new price"
+        );
 
-    if (!newPrice) return;
+      if (!newPrice)
+        return;
 
-    try {
+      try {
 
-      await API.put(
-        `/api/prices/${id}`,
-        {
-          price: newPrice
-        },
-        {
-          headers: {
-            Authorization: token
+        await API.put(
+
+          `/api/prices/${id}`,
+
+          {
+            price:
+              newPrice
+          },
+
+          {
+            headers: {
+              Authorization:
+                token
+            }
           }
-        }
-      );
 
-      alert("Price updated");
+        );
 
-      dispatch(fetchPrices());
+        alert(
+          "Price updated"
+        );
 
-    } catch (err) {
+        dispatch(
+          fetchPrices()
+        );
 
-      alert("Update failed");
+      } catch {
 
-    }
-  };
+        alert(
+          "Update failed"
+        );
+
+      }
+
+    };
 
 
   // DELETE PRODUCT
 
-  const handleDelete = async (id) => {
+  const handleDelete =
+    async (id) => {
 
-    try {
+      try {
 
-      await API.delete(
-        `/api/prices/${id}`,
-        {
-          headers: {
-            Authorization: token
+        await API.delete(
+
+          `/api/prices/${id}`,
+
+          {
+            headers: {
+              Authorization:
+                token
+            }
           }
-        }
-      );
 
-      alert("Deleted");
+        );
 
-      dispatch(fetchPrices());
+        alert(
+          "Deleted"
+        );
 
-    } catch (err) {
+        dispatch(
+          fetchPrices()
+        );
 
-      alert("Delete failed");
+      } catch {
 
-    }
-  };
+        alert(
+          "Delete failed"
+        );
+
+      }
+
+    };
 
 
   return (
 
-    <div className="dashboard-layout">
+    <DistributorLayout>
 
-      {/* SIDEBAR */}
+      {/* TOP BAR */}
 
-      <div className="sidebar">
+      <div className="top-bar">
 
-        <h2 className="logo">
-          PriceCompare
-        </h2>
+        <div>
 
-        <div className="menu-section">
+          <h1>
+            Good morning,
+            {name}
+          </h1>
 
-          <p className="menu-title">
-            MAIN
+          <p>
+            Manage products
+            and distributor
+            prices
           </p>
 
-          <div className="menu-item active">
-            Dashboard
+        </div>
+
+        <div
+          className="top-actions"
+        >
+
+          <button
+            className="btn-outline"
+          >
+            Import CSV
+          </button>
+
+          <button
+            className="btn-blue"
+            onClick={() =>
+              navigate(
+                "/distributor/add-product"
+              )
+            }
+          >
+            + Add Product
+          </button>
+
+        </div>
+
+      </div>
+
+
+      {/* STATS */}
+
+      <div className="stats">
+
+        <div
+          className="stat-card"
+        >
+
+          <div
+            className="stat-label"
+          >
+            Total Products
           </div>
 
-          <div className="menu-item">
-            Compare Prices
+          <div
+            className="stat-val"
+          >
+            {prices.length}
           </div>
 
-          <div className="menu-item">
-            My Watchlist
+        </div>
+
+
+        <div
+          className="stat-card"
+        >
+
+          <div
+            className="stat-label"
+          >
+            In Stock
+          </div>
+
+          <div
+            className="stat-val"
+          >
+
+            {
+              prices.filter(
+                p =>
+                  p.itemId
+                    ?.quantity >
+                  10
+              ).length
+            }
+
+          </div>
+
+        </div>
+
+
+        <div
+          className="stat-card"
+        >
+
+          <div
+            className="stat-label"
+          >
+            Low Stock
+          </div>
+
+          <div
+            className="stat-val"
+          >
+
+            {
+              prices.filter(
+                p =>
+                  p.itemId
+                    ?.quantity <=
+                  10
+              ).length
+            }
+
           </div>
 
         </div>
@@ -124,147 +266,82 @@ function Distributor() {
       </div>
 
 
-      {/* MAIN */}
+      {/* PRODUCTS TABLE */}
 
-      <div className="main-content">
+      <div
+        className="table-wrap"
+      >
 
+        <table
+          className="tbl"
+        >
 
-        {/* TOP */}
+          <thead>
 
-        <div className="top-bar">
+            <tr>
 
-          <div>
+              <th>
+                Product
+              </th>
 
-            <h1>
-              Good morning, Distributor
-            </h1>
+              <th>
+                Your Price
+              </th>
 
-            <p>
-              Manage products and distributor prices
-            </p>
+              <th>
+                MRP
+              </th>
 
-          </div>
+              <th>
+                Stock
+              </th>
 
-          <div className="top-actions">
+              <th>
+                Status
+              </th>
 
-            <button className="btn-outline">
-              Import CSV
-            </button>
+              <th>
+                Actions
+              </th>
 
-            <button
-              className="btn-blue"
-              onClick={() =>
-                window.location.href =
-                  "/distributor/add-product"
-              }
-            >
-              + Add Product
-            </button>
+            </tr>
 
-          </div>
+          </thead>
 
-        </div>
+          <tbody>
 
-
-        {/* STATS */}
-
-        <div className="stats">
-
-          <div className="stat-card">
-
-            <div className="stat-label">
-              Total products
-            </div>
-
-            <div className="stat-val">
-              {prices.length}
-            </div>
-
-          </div>
-
-
-          <div className="stat-card">
-
-            <div className="stat-label">
-              In stock
-            </div>
-
-            <div className="stat-val">
-
-              {
-                prices.filter(
-                  p => p.itemId?.quantity > 10
-                ).length
-              }
-
-            </div>
-
-          </div>
-
-
-          <div className="stat-card">
-
-            <div className="stat-label">
-              Low stock
-            </div>
-
-            <div className="stat-val">
-
-              {
-                prices.filter(
-                  p => p.itemId?.quantity <= 10
-                ).length
-              }
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-        {/* TABLE */}
-
-        <div className="table-wrap">
-
-          <table className="tbl">
-
-            <thead>
+            {loading ? (
 
               <tr>
 
-                <th>Product</th>
-                <th>Your Price</th>
-                <th>MRP</th>
-                <th>Stock</th>
-                <th>Status</th>
-                <th>Actions</th>
+                <td
+                  colSpan="6"
+                >
+                  Loading...
+                </td>
 
               </tr>
 
-            </thead>
+            ) : (
 
+              prices.map(
+                (p) => (
 
-            <tbody>
-
-              {loading ? (
-
-                <tr>
-                  <td colSpan="6">
-                    Loading...
-                  </td>
-                </tr>
-
-              ) : (
-
-                prices.map((p) => (
-
-                  <tr key={p._id}>
+                  <tr
+                    key={p._id}
+                  >
 
                     <td>
 
-                      <div className="prod-name">
-                        {p.itemId?.name}
+                      <div
+                        className="prod-name"
+                      >
+
+                        {
+                          p.itemId
+                            ?.name
+                        }
+
                       </div>
 
                     </td>
@@ -274,26 +351,43 @@ function Distributor() {
                     </td>
 
                     <td>
-                      ₹{p.itemId?.mrp}
+                      ₹
+                      {
+                        p.itemId
+                          ?.mrp
+                      }
                     </td>
 
                     <td>
-                      {p.itemId?.quantity}
+
+                      {
+                        p.itemId
+                          ?.quantity
+                      }
+
                     </td>
 
                     <td>
 
                       <span
                         className={
-                          p.itemId?.quantity > 10
+                          p.itemId
+                            ?.quantity >
+                          10
+
                             ? "status-pill active"
+
                             : "status-pill low"
                         }
                       >
 
                         {
-                          p.itemId?.quantity > 10
+                          p.itemId
+                            ?.quantity >
+                          10
+
                             ? "Active"
+
                             : "Low Stock"
                         }
 
@@ -306,7 +400,9 @@ function Distributor() {
                       <button
                         className="btn-edit"
                         onClick={() =>
-                          handleUpdate(p._id)
+                          handleUpdate(
+                            p._id
+                          )
                         }
                       >
                         Edit
@@ -315,7 +411,9 @@ function Distributor() {
                       <button
                         className="btn-remove"
                         onClick={() =>
-                          handleDelete(p._id)
+                          handleDelete(
+                            p._id
+                          )
                         }
                       >
                         Remove
@@ -325,20 +423,21 @@ function Distributor() {
 
                   </tr>
 
-                ))
+                )
+              )
 
-              )}
+            )}
 
-            </tbody>
+          </tbody>
 
-          </table>
-
-        </div>
+        </table>
 
       </div>
 
-    </div>
+    </DistributorLayout>
+
   );
+
 }
 
 export default Distributor;

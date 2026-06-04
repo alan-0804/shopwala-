@@ -1,106 +1,150 @@
 import { useNavigate } from "react-router-dom";
 
 function Layout({ children }) {
+
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+
+  const token =
+    localStorage.getItem("token");
 
   const handleLogout = () => {
+
     localStorage.clear();
+
     navigate("/login");
+
   };
 
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
 
-      {/* Sidebar */}
-      <div style={{
-        width: "220px",
-        background: "#fff",
-        borderRight: "1px solid #ddd",
-        padding: "20px",
-        display: "flex",
-        flexDirection: "column"
-      }}>
-        <h2>SmartStock</h2>
+    <div className="layout">
 
-        <p onClick={() => navigate("/dashboard")} style={{ cursor: "pointer" }}>
-          Dashboard
-        </p>
+      {/* SIDEBAR */}
+
+      <div className="sidebar">
+
+        <h2 className="logo">
+          SmartStock
+        </h2>
+
         <div
-  className="menu-item"
-  onClick={() =>
-    window.location.href =
-      "/order-products"
-  }
->
+          className="menu-item"
+          onClick={() =>
+            navigate("/dashboard")
+          }
+        >
+          🏠 Dashboard
+        </div>
 
-  Order Products
+        <div
+          className="menu-item"
+          onClick={() =>
+            navigate("/order-products")
+          }
+        >
+          🛒 Order Products
+        </div>
 
-</div>
+        <div
+          className="menu-item"
+          onClick={() =>
+            navigate("/cart")
+          }
+        >
+          🛍 Cart
+        </div>
 
-        <p>Compare Prices</p>
-        <p>Watchlist</p>
+        <div
+          className="menu-item"
+          onClick={() =>
+            navigate("/my-orders")
+          }
+        >
+          📋 My Orders
+        </div>
+
+        <div
+          className="menu-item"
+          onClick={() =>
+            navigate("/add-product")
+          }
+        >
+          ➕ Add Product
+        </div>
 
         <hr />
 
-        <p>Distributors</p>
         <div
-  className="menu-item"
-  onClick={() =>
-    window.location.href =
-      "/my-orders"
-  }
->
+          className="menu-item"
+        >
+          📊 Compare Prices
+        </div>
 
-  My Orders
+        <div
+          className="menu-item"
+        >
+          ⭐ Watchlist
+        </div>
 
-</div>
+        <div
+          className="menu-item"
+        >
+          🚚 Distributors
+        </div>
 
-        <hr />
+        <div
+          className="menu-item"
+        >
+          ⚙️ Settings
+        </div>
 
-        <p>Settings</p>
+        {/* LOGIN / LOGOUT */}
 
-        {/* 🔥 Login / Logout button */}
-        <div style={{ marginTop: "auto" }}>
+        <div
+          style={{
+            marginTop: "auto"
+          }}
+        >
+
           {token ? (
+
             <button
-              onClick={handleLogout}
-              style={btnStyle}
+              onClick={
+                handleLogout
+              }
+              className="logout-btn"
             >
               Logout
             </button>
+
           ) : (
+
             <button
-              onClick={() => navigate("/login")}
-              style={btnStyle}
+              onClick={() =>
+                navigate("/login")
+              }
+              className="logout-btn"
             >
               Login
             </button>
+
           )}
+
         </div>
+
       </div>
 
-      {/* Main Content */}
-      <div style={{
-        flex: 1,
-        padding: "20px",
-        background: "#f5f6fa"
-      }}>
+      {/* MAIN CONTENT */}
+
+      <div className="main-content">
+
         {children}
+
       </div>
 
     </div>
+
   );
 }
-
-const btnStyle = {
-  width: "100%",
-  padding: "10px",
-  background: "#3B6D11",
-  color: "white",
-  border: "none",
-  borderRadius: "5px",
-  cursor: "pointer"
-};
 
 export default Layout;

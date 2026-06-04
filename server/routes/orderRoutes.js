@@ -21,6 +21,7 @@ router.post(
     try {
 
       const {
+        orderGroupId,
         priceId,
         quantity
       } = req.body;
@@ -93,6 +94,8 @@ router.post(
       // CREATE ORDER
 
       const order = new Order({
+
+        orderGroupId,
 
         shopkeeperId:
           req.user.id,
@@ -200,5 +203,51 @@ router.get(
   }
 );
 
+router.get(
+  "/distributor",
+  auth,
+  async (req, res) => {
+
+    try {
+
+      const orders =
+        await Order.find({
+
+          distributorId:
+            req.user.id
+
+        })
+
+          .populate(
+            "itemId"
+          )
+
+          .populate(
+            "shopkeeperId"
+          );
+        console.log(
+        "Distributor User:",
+        req.user.id
+      );
+
+      console.log(
+        "Orders:",
+        orders
+      );
+      res.json(
+        orders
+      );
+
+    } catch (err) {
+
+      res.status(500)
+        .json({
+          error:
+            err.message
+        });
+
+    }
+  }
+);
 
 module.exports = router;

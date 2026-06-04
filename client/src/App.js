@@ -5,11 +5,13 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
 import Distributor from "./pages/Distributor";
 import "./App.css";
+import Products from "./pages/Products";
 import Register from "./pages/Register";
 import OrderProducts from "./pages/OrderProducts";
 import AddProduct from "./pages/AddProduct";
 import MyOrders from "./pages/MyOrders";
 import Cart from "./pages/Cart";
+import DistributorOrders from "./pages/DistributorOrders";
 function App() {
   const token = localStorage.getItem("token");
 
@@ -69,6 +71,16 @@ function App() {
       <Cart />
     </ProtectedRoute>
   }
+/>
+<Route
+  path="/distributor-orders"
+  element={
+    <DistributorOrders />
+  }
+/>
+<Route
+  path="/products"
+  element={<Products />}
 />
       </Routes>
     </BrowserRouter>

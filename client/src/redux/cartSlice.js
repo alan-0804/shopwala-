@@ -29,8 +29,8 @@ const cartSlice = createSlice({
 
           (item) =>
 
-            item._id ===
-            action.payload._id
+            item.priceId ===
+            action.payload.priceId
         );
 
       if (existingItem) {
@@ -67,7 +67,7 @@ const cartSlice = createSlice({
 
           (item) =>
 
-            item._id !==
+            item.priceId !==
             action.payload
         );
     },
@@ -85,7 +85,7 @@ const cartSlice = createSlice({
 
           (i) =>
 
-            i._id ===
+            i.priceId ===
             action.payload
         );
 
@@ -109,7 +109,7 @@ const cartSlice = createSlice({
 
           (i) =>
 
-            i._id ===
+            i.priceId ===
             action.payload
         );
 

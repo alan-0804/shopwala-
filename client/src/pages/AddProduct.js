@@ -1,14 +1,18 @@
 import { useState } from "react";
 import API from "../api";
+import DistributorLayout from "../components/DistributorLayout";
+import "../distributor.css";
 
 function AddProduct() {
 
   const [form, setForm] = useState({
-    name: "",
-    mrp: "",
-    quantity: "",
-    price: ""
-  });
+  name: "",
+  category: "",
+  mrp: "",
+  quantity: "",
+  price: "",
+  image: ""
+});
 
   const token = localStorage.getItem("token");
 
@@ -25,7 +29,8 @@ function AddProduct() {
           name: form.name,
           category: form.category,
           mrp: form.mrp,
-          quantity: form.quantity
+          quantity: form.quantity,
+          image: form.image
         },
         {
           headers: {
@@ -57,7 +62,8 @@ function AddProduct() {
         category:"",
         mrp: "",
         quantity: "",
-        price: ""
+        price: "",
+        image:""
       });
 
     } catch (err) {
@@ -73,108 +79,129 @@ function AddProduct() {
   };
 
   return (
-    <div className="dashboard-card">
 
-      <h1>Add Product</h1>
+  <DistributorLayout>
 
-      <form onSubmit={handleSubmit}>
+    <div className="add-product-container">
 
-        <input
-          placeholder="Product Name"
-          value={form.name}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              name: e.target.value
-            })
-          }
-        />
+      <div className="add-product-card">
 
-        <br /><br />
+        <h1>Add Product</h1>
+
+        <p className="subtitle">
+          Add a new product to your inventory
+        </p>
+
+        <form
+          onSubmit={handleSubmit}
+          className="add-product-form"
+        >
+
+          <input
+            placeholder="Product Name"
+            value={form.name}
+            onChange={(e) =>
+              setForm({
+                ...form,
+                name: e.target.value
+              })
+            }
+          />
+
           <select
-  value={form.category}
-  onChange={(e) =>
-    setForm({
-      ...form,
-      category: e.target.value
-    })
-  }
->
+            value={form.category}
+            onChange={(e) =>
+              setForm({
+                ...form,
+                category: e.target.value
+              })
+            }
+          >
+            <option value="">
+              Select Category
+            </option>
 
-  <option value="">
-    Select Category
-  </option>
+            <option value="Grocery">
+              Grocery
+            </option>
 
-  <option value="Grocery">
-    Grocery
-  </option>
+            <option value="Beverages">
+              Beverages
+            </option>
 
-  <option value="Beverages">
-    Beverages
-  </option>
+            <option value="Snacks">
+              Snacks
+            </option>
 
-  <option value="Snacks">
-    Snacks
-  </option>
+            <option value="Dairy">
+              Dairy
+            </option>
 
-  <option value="Dairy">
-    Dairy
-  </option>
+            <option value="Personal Care">
+              Personal Care
+            </option>
+          </select>
 
-  <option value="Personal Care">
-    Personal Care
-  </option>
+          <input
+            placeholder="MRP"
+            value={form.mrp}
+            onChange={(e) =>
+              setForm({
+                ...form,
+                mrp: e.target.value
+              })
+            }
+          />
 
-</select>
+          <input
+            placeholder="Quantity"
+            value={form.quantity}
+            onChange={(e) =>
+              setForm({
+                ...form,
+                quantity: e.target.value
+              })
+            }
+          />
 
-<br /><br />
-        <input
-          placeholder="MRP"
-          value={form.mrp}
+          <input
+            placeholder="Distributor Price"
+            value={form.price}
+            onChange={(e) =>
+              setForm({
+                ...form,
+                price: e.target.value
+              })
+            }
+          />
+
+          
+          <input
+          placeholder="Product Image URL"
+          value={form.image}
           onChange={(e) =>
             setForm({
               ...form,
-              mrp: e.target.value
+              image: e.target.value
             })
           }
         />
 
-        <br /><br />
+          <button
+            className="add-product-btn"
+          >
+            Save Product
+          </button>
 
-        <input
-          placeholder="Quantity"
-          value={form.quantity}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              quantity: e.target.value
-            })
-          }
-        />
+        </form>
 
-        <br /><br />
-
-        <input
-          placeholder="Distributor Price"
-          value={form.price}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              price: e.target.value
-            })
-          }
-        />
-
-        <br /><br />
-
-        <button className="add-product-btn">
-          Save Product
-        </button>
-
-      </form>
+      </div>
 
     </div>
-  );
+
+  </DistributorLayout>
+
+);
 }
 
 export default AddProduct;

@@ -1,11 +1,40 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Layout from "../components/Layout";
 
 function MyOrders() {
 
   const [orders, setOrders] =
     useState([]);
 
+    const groupedOrders =
+  orders.reduce(
+
+    (groups, order) => {
+
+      if (
+        !groups[
+          order.orderGroupId
+        ]
+      ) {
+
+        groups[
+          order.orderGroupId
+        ] = [];
+
+      }
+
+      groups[
+        order.orderGroupId
+      ].push(order);
+
+      return groups;
+
+    },
+
+    {}
+
+  );
   const token =
     localStorage.getItem("token");
 
@@ -44,6 +73,8 @@ function MyOrders() {
 
   return (
 
+  <Layout>
+
     <div className="card">
 
       <div className="card-hd">
@@ -54,69 +85,154 @@ function MyOrders() {
 
       </div>
 
+      <div className="orders-grid">
 
-      <table className="tbl">
+        {Object.entries(
+  groupedOrders
+).map(
 
-        <thead>
+  ([groupId, items]) => {
 
-          <tr>
+    const grandTotal =
+      items.reduce(
 
-            <th>Product</th>
+        (sum, item) =>
 
-            <th>Distributor</th>
+          sum +
+          item.total,
 
-            <th>Qty</th>
+        0
 
-            <th>Price</th>
+      );
 
-            <th>Total</th>
+    return (
 
-            <th>Status</th>
+      <div
+        key={groupId}
+        className="order-group"
+      >
 
-          </tr>
+        <div
+          className="order-group-header"
+        >
 
-        </thead>
+          <h2>
 
+            📦 Order #
+            {
+              groupId.slice(-6)
+            }
 
-        <tbody>
+          </h2>
 
-          {orders.map((o) => (
+          <h3>
+            ₹{grandTotal}
+          </h3>
 
-            <tr key={o._id}>
+        </div>
 
-              <td>
-                {o.itemId?.name}
-              </td>
+        {
 
-              <td>
-                {o.distributorId?.name}
-              </td>
+          items.map((o) => (
 
-              <td>
-                {o.quantity}
-              </td>
+            <div
+              key={o._id}
+              className="order-card"
+            >
 
-              <td>
-                ₹{o.price}
-              </td>
+              <div
+                className="order-left"
+              >
 
-              <td>
-                ₹{o.total}
-              </td>
+                <img
 
-              <td>
-                {o.status}
-              </td>
+  src={
+    o.itemId?.image ||
+    "https://via.placeholder.com/150"
+  }
+  alt={o.itemId?.name}
+  className="order-image"
+/>
+              </div>
 
-            </tr>
-          ))}
+              <div
+                className="order-right"
+              >
 
-        </tbody>
+                <h3>
+                  {
+                    o.itemId?.name
+                  }
+                </h3>
 
-      </table>
+                <p>
+
+                  Qty:
+                  {" "}
+                  {
+                    o.quantity
+                  }
+
+                </p>
+
+                <p>
+
+                  Price:
+                  ₹{o.price}
+
+                </p>
+
+                <p>
+
+                  Total:
+                  ₹{o.total}
+
+                </p>
+
+                <p>
+
+                  Distributor:
+                  {" "}
+
+                  {
+                    o
+                    .distributorId
+                    ?.name
+                  }
+
+                </p>
+
+                <span
+                  className="status-pending"
+                >
+
+                  {o.status}
+
+                </span>
+
+              </div>
+
+            </div>
+
+          ))
+
+        }
+
+      </div>
+
+    );
+
+  }
+
+)}
+
+      </div>
 
     </div>
-  );
+
+  </Layout>
+
+);
 }
 
 export default MyOrders;

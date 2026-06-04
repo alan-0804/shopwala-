@@ -35,7 +35,11 @@ const orderSchema = new mongoose.Schema({
   status: {
     type: String,
     default: "Pending"
-  }
+  },
+  orderGroupId: {
+  type: String,
+  required: true
+},
 
 }, { timestamps: true });
 

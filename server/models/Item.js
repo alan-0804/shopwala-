@@ -20,7 +20,11 @@ const itemSchema = new mongoose.Schema({
   mrp:{
     type: Number,
     default: 0
-  }
+  },
+  image: {
+  type: String,
+  default: ""
+}
 }, { timestamps: true });
 
 module.exports = mongoose.model("Item", itemSchema);

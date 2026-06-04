@@ -6,6 +6,7 @@ import { useNavigate }
 from "react-router-dom";
 import { addToCart }
 from "../redux/cartSlice";
+import Layout from "../components/Layout";
 function OrderProducts() {
 
   const [items, setItems] = useState([]);
@@ -136,7 +137,9 @@ function OrderProducts() {
 
   }
 };
-  return (
+ return (
+
+  <Layout>
 
     <div className="card">
 
@@ -147,7 +150,6 @@ function OrderProducts() {
         </span>
 
       </div>
-
 
       {/* SEARCH + FILTER */}
 
@@ -161,7 +163,6 @@ function OrderProducts() {
           }
         />
 
-
         <select
           value={selectedCategory}
           onChange={(e) =>
@@ -172,23 +173,17 @@ function OrderProducts() {
         >
 
           <option>All</option>
-
           <option>Grocery</option>
-
           <option>Beverages</option>
-
           <option>Snacks</option>
-
           <option>Dairy</option>
-
           <option>Personal Care</option>
 
         </select>
 
       </div>
 
-
-      {/* PRODUCTS GRID */}
+      {/* PRODUCTS */}
 
       <div className="product-grid">
 
@@ -207,102 +202,129 @@ function OrderProducts() {
               className="product-card"
             >
 
-              <h3>
-                {item.name}
-              </h3>
+              {/* IMAGE */}
 
-              <p>
-                Category:
-                {" "}
-                {item.category}
-              </p>
+              <div className="product-left">
 
-              <p>
-                MRP:
-                ₹{item.mrp}
-              </p>
+                <img
+  src={
+    item.image ||
+    "https://via.placeholder.com/150"
+  }
+  alt={item.name}
+  className="product-image"
+/>
 
-              <p>
-                Best Price:
-                ₹{bestPrice}
-              </p>
+              </div>
 
-              <p>
-                Margin:
-                ₹{margin}
-              </p>
+              {/* DETAILS */}
 
-              <p>
+              <div className="product-right">
 
-                Distributor:
-                {" "}
+                <h3>
+                  {item.name}
+                </h3>
 
-                {
-                  item.bestPrice
-                    ?.distributorId
-                    ?.name || "-"
-                }
+                <p>
+                  Category:
+                  {" "}
+                  {item.category}
+                </p>
 
-              </p>
+                <p>
+                  MRP:
+                  ₹{item.mrp}
+                </p>
 
-              <button
-  className="btn-green"
+                <p>
+                  Best Price:
+                  ₹{bestPrice}
+                </p>
 
-  onClick={() => {
+                <p>
+                  Margin:
+                  ₹{margin}
+                </p>
 
-    const cartItem = {
+                <p>
+                  Distributor:
+                  {" "}
+                  {
+                    item.bestPrice
+                      ?.distributorId
+                      ?.name || "-"
+                  }
+                </p>
 
-  priceId:
-    item.bestPrice?._id,
+                <div className="product-buttons">
 
-  name:
-    item.name,
+                  <button
+                    className="btn-green"
+                    onClick={() => {
 
-  price:
-    item.bestPrice?.price || 0,
+                      const cartItem = {
 
-  distributor:
-    item.bestPrice
-      ?.distributorId?.name || "-"
+                        priceId:
+                          item.bestPrice?._id,
 
-};
+                        name:
+                          item.name,
 
-    console.log(cartItem);
+                        price:
+                          item.bestPrice?.price || 0,
 
-    dispatch(
-      addToCart(cartItem)
-    );
+                        distributor:
+                          item.bestPrice
+                            ?.distributorId?.name || "-"
 
-    console.log("DISPATCHED");
+                      };
 
-    alert("Added to cart");
+                      dispatch(
+                        addToCart(
+                          cartItem
+                        )
+                      );
 
-  }}
->
+                      alert(
+                        "Added to cart"
+                      );
 
-  Add To Cart
+                    }}
+                  >
 
-</button>
-<button
-  className="btn-green"
-  onClick={() =>
-  navigate("/cart")
-}
-  
->
+                    Add To Cart
 
-  Go To Cart
+                  </button>
 
-</button>
+                  <button
+                    className="btn-green"
+                    onClick={() =>
+                      navigate("/cart")
+                    }
+                  >
+
+                    Go To Cart
+
+                  </button>
+
+                </div>
+
+              </div>
 
             </div>
+
           );
+
         })}
 
       </div>
 
     </div>
-  );
+
+  </Layout>
+
+);
+
 }
 
 export default OrderProducts;

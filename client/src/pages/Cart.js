@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import Layout from "../components/Layout";
 import {
   useSelector,
   useDispatch
@@ -50,6 +50,9 @@ function Cart() {
       const token =
         localStorage.getItem("token");
 
+        const orderGroupId =
+        Date.now().toString();
+
       for (const item of cartItems) {
 
         await axios.post(
@@ -57,7 +60,8 @@ function Cart() {
           "http://localhost:5000/api/orders",
 
           {
-
+            orderGroupId,
+            
             priceId: item.priceId,
 
             quantity: item.quantity
@@ -91,6 +95,8 @@ function Cart() {
 
   return (
 
+    <Layout>
+
     <div className="card">
 
       <h1>
@@ -112,96 +118,96 @@ function Cart() {
             {cartItems.map((item) => (
 
               <div
-                key={item.priceId}
-                style={{
-                  border:
-                    "1px solid #ddd",
+  key={item.priceId}
+  className="cart-card"
+>
 
-                  padding: "15px",
+  <div className="cart-left">
 
-                  marginBottom: "15px",
+   <img
+  src={
+    item.image ||
+    "https://via.placeholder.com/150"
+  }
+  alt={item.name}
+  className="cart-image"
+/>
 
-                  borderRadius: "10px"
-                }}
-              >
+  </div>
 
-                <h3>
-                  {item.name}
-                </h3>
+  <div className="cart-right">
 
-                <p>
-                  Distributor:
-                  {" "}
-                  {item.distributor}
-                </p>
+    <h3>
+      {item.name}
+    </h3>
 
-                <p>
-                  Price:
-                  ₹{item.price}
-                </p>
+    <p>
+      Distributor:
+      {" "}
+      {item.distributor}
+    </p>
 
-                <p>
+    <p>
+      Price:
+      ₹{item.price}
+    </p>
 
-                  Quantity:
+    <div className="qty-row">
 
-                  <button
-                    onClick={() =>
-                      dispatch(
-                        decreaseQty(
-                          item.priceId
-                        )
-                      )
-                    }
-                  >
-                    -
-                  </button>
+      <button
+        onClick={() =>
+          dispatch(
+            decreaseQty(
+              item.priceId
+            )
+          )
+        }
+      >
+        -
+      </button>
 
-                  {" "}
+      <span>
+        {item.quantity}
+      </span>
 
-                  {item.quantity}
+      <button
+        onClick={() =>
+          dispatch(
+            increaseQty(
+              item.priceId
+            )
+          )
+        }
+      >
+        +
+      </button>
 
-                  {" "}
+    </div>
 
-                  <button
-                    onClick={() =>
-                      dispatch(
-                        increaseQty(
-                          item.priceId
-                        )
-                      )
-                    }
-                  >
-                    +
-                  </button>
+    <p>
+      Total:
+      ₹{
+        item.price *
+        item.quantity
+      }
+    </p>
 
-                </p>
+    <button
+      className="remove-btn"
+      onClick={() =>
+        dispatch(
+          removeFromCart(
+            item.priceId
+          )
+        )
+      }
+    >
+      Remove
+    </button>
 
-                <p>
+  </div>
 
-                  Total:
-                  ₹
-                  {
-                    item.price *
-                    item.quantity
-                  }
-
-                </p>
-
-                <button
-                  onClick={() =>
-                    dispatch(
-                      removeFromCart(
-                       item.priceId
-                      )
-                    )
-                  }
-                >
-
-                  Remove
-
-                </button>
-
-              </div>
+</div>
             ))}
 
             <h2>
@@ -209,20 +215,39 @@ function Cart() {
               ₹{total}
             </h2>
 
-            <button
-              className="btn-green"
-              onClick={placeAllOrders}
-            >
+           <div className="cart-summary">
 
-              Place Order
+  <h2>
+    Order Summary
+  </h2>
 
-            </button>
+  <p>
+    Items:
+    {" "}
+    {cartItems.length}
+  </p>
+
+  <p>
+    Total:
+    ₹{total}
+  </p>
+
+  <button
+    className="btn-green"
+    onClick={placeAllOrders}
+  >
+    Place Order
+  </button>
+
+</div>
 
           </div>
         )
       }
 
     </div>
+
+    </Layout>
   );
 }
 
