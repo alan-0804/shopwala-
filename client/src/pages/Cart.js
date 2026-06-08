@@ -124,15 +124,14 @@ function Cart() {
 
   <div className="cart-left">
 
-   <img
+<img
   src={
     item.image ||
     "https://via.placeholder.com/150"
   }
   alt={item.name}
-  className="cart-image"
+  className="product-image"
 />
-
   </div>
 
   <div className="cart-right">

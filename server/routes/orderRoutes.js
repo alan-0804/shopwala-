@@ -8,6 +8,7 @@ const Price = require("../models/Price");
 
 const auth = require("../middleware/auth");
 
+const PDFDocument = require("pdfkit");
 
 // ==============================
 // PLACE ORDER
@@ -247,6 +248,271 @@ router.get(
         });
 
     }
+  }
+);
+
+router.put(
+  "/status/:id",
+  auth,
+  async (req, res) => {
+
+    try {
+
+      const { status } =
+        req.body;
+
+      const order =
+        await Order.findByIdAndUpdate(
+
+          req.params.id,
+
+          { status },
+
+          { new: true }
+
+        );
+
+      res.json(order);
+
+    } catch (err) {
+
+      res.status(500).json({
+        error: err.message
+      });
+
+    }
+
+  }
+);
+
+router.get(
+  "/analytics",
+  auth,
+  async (req, res) => {
+
+    try {
+
+      const orders =
+        await Order.find({
+          distributorId:
+            req.user.id
+        });
+
+      const revenue =
+        orders
+          .filter(
+            o =>
+              o.status ===
+              "Delivered"
+          )
+          .reduce(
+            (sum, o) =>
+              sum + o.total,
+            0
+          );
+
+      const pending =
+        orders.filter(
+          o =>
+            o.status !==
+            "Delivered"
+        ).length;
+
+      res.json({
+
+        totalOrders:
+          orders.length,
+
+        pendingOrders:
+          pending,
+
+        revenue
+
+      });
+
+    } catch (err) {
+
+      res.status(500).json({
+        error:
+          err.message
+      });
+
+    }
+
+  }
+);
+
+router.get(
+  "/invoice/:orderGroupId",
+  auth,
+  async (req, res) => {
+
+    try {
+
+      let orders;
+
+      if (
+        req.user.role ===
+        "distributor"
+      ) {
+
+        orders =
+          await Order.find({
+
+            orderGroupId:
+              req.params.orderGroupId,
+
+            distributorId:
+              req.user.id
+
+          })
+
+            .populate("itemId")
+            .populate("distributorId")
+            .populate("shopkeeperId");
+
+      } else {
+
+        orders =
+          await Order.find({
+
+            orderGroupId:
+              req.params.orderGroupId,
+
+            shopkeeperId:
+              req.user.id
+
+          })
+
+            .populate("itemId")
+            .populate("distributorId")
+            .populate("shopkeeperId");
+
+      }
+
+      if (!orders.length) {
+
+        return res.status(404).json({
+          error: "Invoice not found"
+        });
+
+      }
+
+      const doc =
+        new PDFDocument();
+
+      res.setHeader(
+        "Content-Type",
+        "application/pdf"
+      );
+
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename=Invoice-${req.params.orderGroupId}.pdf`
+      );
+
+      doc.pipe(res);
+
+      doc
+        .fontSize(22)
+        .text(
+          "SmartStock Invoice",
+          {
+            align: "center"
+          }
+        );
+
+      doc.moveDown();
+
+      doc
+        .fontSize(14)
+        .text(
+          `Order ID: ${req.params.orderGroupId}`
+        );
+
+      doc.text(
+        `Shopkeeper: ${
+          orders[0]
+            ?.shopkeeperId
+            ?.name || "-"
+        }`
+      );
+
+      doc.text(
+        `Distributor: ${
+          orders[0]
+            ?.distributorId
+            ?.name || "-"
+        }`
+      );
+
+      doc.moveDown();
+
+      let grandTotal = 0;
+
+      orders.forEach(
+        (order) => {
+
+          doc.text(
+            `Product: ${
+              order.itemId?.name
+            }`
+          );
+
+          doc.text(
+            `Quantity: ${
+              order.quantity
+            }`
+          );
+
+          doc.text(
+            `Price: ₹${
+              order.price
+            }`
+          );
+
+          doc.text(
+            `Total: ₹${
+              order.total
+            }`
+          );
+
+          doc.moveDown();
+
+          grandTotal +=
+            order.total;
+
+        }
+      );
+
+      doc.moveDown();
+
+      doc
+        .fontSize(16)
+        .text(
+          `Grand Total: ₹${grandTotal}`
+        );
+
+      doc.moveDown();
+
+      doc.text(
+        `Status: ${
+          orders[0].status
+        }`
+      );
+
+      doc.end();
+
+    } catch (err) {
+
+      console.log(err);
+
+      res.status(500).json({
+        error: err.message
+      });
+
+    }
+
   }
 );
 

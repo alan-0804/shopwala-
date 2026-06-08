@@ -91,9 +91,12 @@ function Products() {
     <img
   src={
     p.itemId?.image ||
-    "https://via.placeholder.com/150"
+    "/images/product-placeholder.png"
   }
-  alt={p.itemId?.name}
+  alt={
+    p.itemId?.name
+  }
+  className="inventory-image"
 />
 
   </div>

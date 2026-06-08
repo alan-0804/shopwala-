@@ -275,7 +275,12 @@ function OrderProducts() {
 
                         distributor:
                           item.bestPrice
-                            ?.distributorId?.name || "-"
+                            ?.distributorId?.name || "-",
+
+                        image:
+                          item.image,
+
+                        quantity: 1
 
                       };
 

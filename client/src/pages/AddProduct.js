@@ -4,6 +4,8 @@ import DistributorLayout from "../components/DistributorLayout";
 import "../distributor.css";
 
 function AddProduct() {
+const [image, setImage] =
+  useState(null);
 
   const [form, setForm] = useState({
   name: "",
@@ -23,21 +25,53 @@ function AddProduct() {
     try {
 
       // CREATE ITEM
-      const itemRes = await API.post(
-        "/api/items",
-        {
-          name: form.name,
-          category: form.category,
-          mrp: form.mrp,
-          quantity: form.quantity,
-          image: form.image
-        },
-        {
-          headers: {
-            Authorization: token
-          }
-        }
-      );
+      const data =
+  new FormData();
+
+data.append(
+  "name",
+  form.name
+);
+
+data.append(
+  "category",
+  form.category
+);
+
+data.append(
+  "mrp",
+  form.mrp
+);
+
+data.append(
+  "quantity",
+  form.quantity
+);
+
+if (image) {
+
+  data.append(
+    "image",
+    image
+  );
+
+}
+
+const itemRes =
+  await API.post(
+
+    "/api/items",
+
+    data,
+
+    {
+      headers: {
+        Authorization:
+          token
+      }
+    }
+
+  );
 
       const itemId = itemRes.data._id;
 
@@ -56,7 +90,8 @@ function AddProduct() {
       );
 
       alert("Product added");
-
+        setImage(null);
+        
       setForm({
         name: "",
         category:"",
@@ -177,15 +212,14 @@ function AddProduct() {
 
           
           <input
-          placeholder="Product Image URL"
-          value={form.image}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              image: e.target.value
-            })
-          }
-        />
+  type="file"
+  accept="image/*"
+  onChange={(e) =>
+    setImage(
+      e.target.files[0]
+    )
+  }
+/>
 
           <button
             className="add-product-btn"

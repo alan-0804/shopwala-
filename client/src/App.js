@@ -23,7 +23,16 @@ function App() {
         <Route path="/"element={ token ? <Navigate to="/dashboard" /> : <Navigate to="/login" />}/>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route
+  path="/dashboard"
+  element={
+    <ProtectedRoute
+      role="shopkeeper"
+    >
+      <Dashboard />
+    </ProtectedRoute>
+  }
+/>
         <Route
   path="/distributor/add-product"
   element={
@@ -41,13 +50,15 @@ function App() {
   }
 />
         <Route
-          path="/distributor"
-          element={
-            <ProtectedRoute>
-              <Distributor />
-            </ProtectedRoute>
-          }
-        />
+  path="/distributor"
+  element={
+    <ProtectedRoute
+      role="distributor"
+    >
+      <Distributor />
+    </ProtectedRoute>
+  }
+/>
         <Route
   path="/order-products"
   element={

@@ -145,15 +145,16 @@ function MyOrders() {
               >
 
                 <img
-
   src={
     o.itemId?.image ||
     "https://via.placeholder.com/150"
   }
-  alt={o.itemId?.name}
-  className="order-image"
+  alt={
+    o.itemId?.name
+  }
+  className="product-image"
 />
-              </div>
+          </div>
 
               <div
                 className="order-right"
@@ -205,19 +206,101 @@ function MyOrders() {
                 <span
                   className="status-pending"
                 >
-
-                  {o.status}
-
+                    {o.status}
                 </span>
-
+                
+                
               </div>
-
+                    
             </div>
 
           ))
 
         }
+      {(
+  items[0]?.status ===
+    "Out For Delivery" ||
+  items[0]?.status ===
+    "Delivered"
+) && (
 
+  <div
+    style={{
+      textAlign: "right",
+      marginTop: "15px"
+    }}
+  >
+
+    <button
+  className="btn-green"
+  onClick={async () => {
+
+    try {
+
+      const token =
+        localStorage.getItem("token");
+
+      const response =
+        await axios.get(
+
+          `http://localhost:5000/api/orders/invoice/${groupId}`,
+
+          {
+            responseType:
+              "blob",
+
+            headers: {
+              Authorization:
+                token
+            }
+          }
+        );
+
+      const url =
+        window.URL.createObjectURL(
+          new Blob([
+            response.data
+          ])
+        );
+
+      const link =
+        document.createElement(
+          "a"
+        );
+
+      link.href = url;
+
+      link.setAttribute(
+        "download",
+        `Invoice-${groupId}.pdf`
+      );
+
+      document.body.appendChild(
+        link
+      );
+
+      link.click();
+
+      link.remove();
+
+    } catch (err) {
+
+      console.log(err);
+
+      alert(
+        "Invoice download failed"
+      );
+
+    }
+
+  }}
+>
+  Download Group Invoice
+</button>
+
+  </div>
+
+)}
       </div>
 
     );
