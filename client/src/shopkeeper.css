@@ -569,3 +569,306 @@ body {
   padding-bottom: 10px;
   border-bottom: 1px solid #eee;
 }
+.profile-header-card{
+  background:#fff;
+  border-radius:16px;
+  overflow:hidden;
+  margin-bottom:25px;
+  box-shadow:0 4px 20px rgba(0,0,0,.08);
+}
+
+.profile-banner{
+  height:130px;
+  background:linear-gradient(
+    135deg,
+    #4caf50,
+    #2e7d32
+  );
+  position:relative;
+}
+
+.edit-profile-btn{
+  position:absolute;
+  right:20px;
+  top:20px;
+  background:white;
+  border:none;
+  padding:10px 18px;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.profile-header-content{
+  display:flex;
+  align-items:center;
+  gap:25px;
+  padding:20px 30px;
+}
+
+.profile-avatar{
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  border:5px solid white;
+  margin-top:-70px;
+  object-fit:cover;
+  background:#eee;
+}
+
+.profile-user-info h1{
+  margin-bottom:8px;
+}
+
+.profile-role{
+  color:#666;
+  margin-bottom:8px;
+}
+
+.profile-location{
+  color:#555;
+  margin-bottom:12px;
+}
+
+.profile-badges{
+  display:flex;
+  gap:10px;
+}
+
+.verified-badge{
+  background:#e8f5e9;
+  color:#2e7d32;
+  padding:6px 14px;
+  border-radius:20px;
+  font-size:13px;
+}
+
+.member-since{
+  padding:20px 30px;
+  border-top:1px solid #eee;
+  color:#666;
+}
+
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+}
+
+.stat-card{
+  padding:25px;
+  border-radius:12px;
+  text-align:center;
+}
+
+.stat-card.green{
+  background:#eef8ee;
+}
+
+.stat-card.orange{
+  background:#fff3e0;
+}
+
+.stat-card.blue{
+  background:#e3f2fd;
+}
+
+.stat-card.purple{
+  background:#f3e5f5;
+}
+
+.stat-card h2{
+  margin-bottom:8px;
+}
+
+.security-card{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px;
+  background:#fafafa;
+  border-radius:10px;
+}
+
+.security-btn{
+  background:#3B6D11;
+  color:white;
+  border:none;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.danger-zone{
+  margin-top:25px;
+  background:#fff5f5;
+  border:1px solid #ffcdd2;
+  padding:20px;
+  border-radius:12px;
+}
+
+.danger-btn{
+  background:#e53935;
+  color:white;
+  border:none;
+  padding:10px 18px;
+  border-radius:8px;
+  cursor:pointer;
+  margin-top:10px;
+}
+.edit-profile-page{
+  max-width:1200px;
+  margin:auto;
+  padding:30px;
+}
+
+.edit-profile-header{
+  margin-bottom:20px;
+}
+
+.edit-profile-header h1{
+  margin-bottom:5px;
+}.edit-profile-header{
+  background:linear-gradient(
+    135deg,
+    #4caf50,
+    #2e7d32
+  );
+  color:white;
+  padding:30px;
+  border-radius:20px;
+  margin-bottom:25px;
+}
+
+.edit-profile-header h1{
+  margin-bottom:8px;
+}
+
+.edit-profile-header p{
+  color:rgba(255,255,255,.85);
+}
+
+.edit-profile-card{
+  background:white;
+  padding:25px;
+  border-radius:20px;
+  margin-bottom:20px;
+  box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+.edit-profile-card h3{
+  color:#2e7d32;
+  margin-bottom:10px;
+}
+
+.edit-profile-card input,
+.edit-profile-card textarea{
+  width:100%;
+  padding:14px;
+  border:1px solid #ddd;
+  border-radius:12px;
+  font-size:15px;
+  transition:.3s;
+}
+
+.edit-profile-card textarea{
+  min-height:120px;
+  resize:vertical;
+}
+
+.edit-profile-card input:focus,
+.edit-profile-card textarea:focus{
+  outline:none;
+  border-color:#4caf50;
+  box-shadow:0 0 0 3px rgba(76,175,80,.15);
+}
+
+.save-btn{
+
+  background:#2e7d32;
+  color:white;
+
+  border:none;
+
+  padding:14px 28px;
+
+  border-radius:12px;
+
+  font-weight:600;
+
+}
+
+.cancel-btn{
+
+  background:white;
+
+  border:1px solid #ddd;
+
+  padding:14px 28px;
+
+  border-radius:12px;
+
+}
+.two-column-grid{
+  display:grid;
+  grid-template-columns:
+    1fr 1fr;
+  gap:20px;
+}
+
+@media(max-width:900px){
+
+  .two-column-grid{
+    grid-template-columns:1fr;
+  }
+
+}
+.profile-upload-card{
+  background:white;
+
+  padding:25px;
+
+  border-radius:20px;
+
+  margin-bottom:20px;
+
+  box-shadow:
+    0 10px 25px
+    rgba(0,0,0,.08);
+
+  display:flex;
+
+  align-items:center;
+
+  gap:25px;
+}
+
+.edit-profile-avatar{
+
+  width:140px;
+
+  height:140px;
+
+  border-radius:50%;
+
+  object-fit:cover;
+
+  border:5px solid #4caf50;
+
+}
+.edit-profile-card h3{
+
+  background:#f1f8e9;
+
+  padding:12px 15px;
+
+  border-radius:10px;
+
+  color:#2e7d32;
+
+  margin-bottom:15px;
+
+}

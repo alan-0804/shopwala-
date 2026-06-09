@@ -3,7 +3,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const Item = require("./models/Item");
-const Distributor = require("./models/Distributor");
 const Price = require("./models/Price");
 const authRoutes = require("./routes/authRoutes");
 const priceRoutes = require("./routes/priceRoutes");
@@ -49,19 +48,7 @@ app.get("/api/items", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-app.post("/api/distributors", async (req, res) => {
-  try {
-    const dist = new Distributor(req.body);
-    const saved = await dist.save();
-    res.json(saved);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-app.get("/api/distributors", async (req, res) => {
-  const data = await Distributor.find();
-  res.json(data);
-});
+
 app.post("/api/prices", async (req, res) => {
   try {
     const price = new Price(req.body);
@@ -90,6 +77,13 @@ app.get("/api/best-price/:itemId", async (req, res) => {
   }
 });
 
-app.listen(process.env.PORT, () =>
-  console.log(`Server running on port ${process.env.PORT}`)
-);
+const PORT =
+  process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+
+  console.log(
+    `Server running on port ${PORT}`
+  );
+
+});

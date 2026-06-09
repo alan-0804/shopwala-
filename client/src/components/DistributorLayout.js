@@ -71,7 +71,22 @@ function DistributorLayout({ children }) {
         >
           ⚙ Settings
         </div>
+        <div
+  className="menu-item"
+  onClick={() =>
+    navigate("/distributor/profile")
+  }
+>
+  👤 Profile
+</div>
 
+
+          <button
+            className="logout-btn"
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
         <div
           style={{
             marginTop: "auto"

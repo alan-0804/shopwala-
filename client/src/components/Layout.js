@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import  { useNavigate } from "react-router-dom";
 
 function Layout({ children }) {
 
@@ -63,14 +63,7 @@ function Layout({ children }) {
           📋 My Orders
         </div>
 
-        <div
-          className="menu-item"
-          onClick={() =>
-            navigate("/add-product")
-          }
-        >
-          ➕ Add Product
-        </div>
+        
 
         <hr />
 
@@ -97,16 +90,17 @@ function Layout({ children }) {
         >
           ⚙️ Settings
         </div>
+        <div
+  className="menu-item"
+  onClick={() =>
+    navigate("/profile")
+  }
+>
+  👤 Profile
+</div>
 
         {/* LOGIN / LOGOUT */}
-
-        <div
-          style={{
-            marginTop: "auto"
-          }}
-        >
-
-          {token ? (
+        {token ? (
 
             <button
               onClick={
@@ -129,7 +123,13 @@ function Layout({ children }) {
             </button>
 
           )}
-
+        <div
+          style={{
+            marginTop: "auto"
+          }}
+        >
+        
+          
         </div>
 
       </div>

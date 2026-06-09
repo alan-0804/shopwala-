@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
+const auth = require("../middleware/auth");
 // Register
 router.post("/register", async (req, res) => {
   try {
@@ -46,5 +46,110 @@ router.post("/login", async (req, res) => {
 
   res.json({ token, role: user.role ,name: user.name });
 });
+
+router.get(
+  "/profile",
+  auth,
+  async (req, res) => {
+
+    try {
+
+      const user =
+        await User.findById(
+          req.user.id
+        ).select("-password");
+
+      res.json(user);
+
+    } catch (err) {
+
+      res.status(500).json({
+        error: err.message
+      });
+
+    }
+
+  }
+);
+
+router.put(
+  "/profile",
+  auth,
+  async (req, res) => {
+
+    try {
+
+      const user =
+        await User.findByIdAndUpdate(
+
+          req.user.id,
+
+          {
+
+            name:
+              req.body.name,
+
+            ownerName:
+              req.body.ownerName,
+
+            phone:
+              req.body.phone,
+
+            address:
+              req.body.address,
+
+            profileImage:
+              req.body.profileImage,
+
+            businessType:
+              req.body.businessType,
+
+            description:
+              req.body.description,
+
+            city:
+              req.body.city,
+
+            state:
+              req.body.state,
+
+            pincode:
+              req.body.pincode,
+
+            location:
+              req.body.location,
+
+            companyName:
+              req.body.companyName,
+
+            companyAddress:
+              req.body.companyAddress,
+
+            gstNumber:
+              req.body.gstNumber,
+
+            panNumber:
+              req.body.panNumber
+
+          },
+
+          {
+            new: true
+          }
+
+        ).select("-password");
+
+      res.json(user);
+
+    } catch (err) {
+
+      res.status(500).json({
+        error: err.message
+      });
+
+    }
+
+  }
+);
 
 module.exports = router;
